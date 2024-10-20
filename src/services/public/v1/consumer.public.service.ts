@@ -117,14 +117,14 @@ export const triggerEcosystemFlow = async (props: {
     }
 
     //check if resource and purpose exists inside contract
-    const resourceExists = contractResponse.serviceOfferings.find(
+    const resource = contractResponse.serviceOfferings.find(
         (so: { serviceOffering: string }) => so.serviceOffering === resourceId
     );
-    const purposeExists = contractResponse.serviceOfferings.find(
+    const purpose = contractResponse.serviceOfferings.find(
         (so: { serviceOffering: string }) => so.serviceOffering === purposeId
     );
 
-    if (!purposeExists) {
+    if (!purpose) {
         Logger.error({
             message: 'Wrong purpose given',
             location: 'consumerExchange',
@@ -135,7 +135,7 @@ export const triggerEcosystemFlow = async (props: {
             500
         );
     }
-    if (!resourceExists) {
+    if (!resource) {
         Logger.error({
             message: 'Wrong resource given',
             location: 'consumerExchange',
@@ -155,39 +155,13 @@ export const triggerEcosystemFlow = async (props: {
         serviceOffering: resourceId,
     });
 
-    const consumerSelfDescription = contractResponse.serviceOfferings.find(
-        (serviceOffering: any) => {
-            if (serviceOffering.serviceOffering === purposeId) {
-                return serviceOffering;
-            } else return null;
-        }
-    );
+    const consumerEndpoint = purpose.participant;
+    const providerEndpoint = resource.participant;
 
-    const [consumerSelfDescriptionResponse] = await handle(
-        axios.get(consumerSelfDescription.participant)
-    );
-
-    //search Provider Endpoint
-    const providerSelfDescription = contractResponse.serviceOfferings.find(
-        (serviceOffering: any) => {
-            if (serviceOffering.serviceOffering === resourceId) {
-                return serviceOffering;
-            } else return null;
-        }
-    );
-
-    const [providerSelfDescriptionResponse] = await handle(
-        axios.get(providerSelfDescription.participant)
-    );
-
-    if (
-        consumerSelfDescriptionResponse?.dataspaceEndpoint ===
-        (await getEndpoint())
-    ) {
+    if (consumerEndpoint === (await getEndpoint())) {
         //search consumerEndpoint
         dataExchange = await DataExchange.create({
-            providerEndpoint:
-                providerSelfDescriptionResponse?.dataspaceEndpoint,
+            providerEndpoint: providerEndpoint,
             resources: mappedResources,
             purposeId: purposeId,
             contract: contract,
@@ -196,13 +170,9 @@ export const triggerEcosystemFlow = async (props: {
             createdAt: new Date(),
         });
         await dataExchange.createDataExchangeToOtherParticipant('provider');
-    } else if (
-        providerSelfDescriptionResponse?.dataspaceEndpoint ===
-        (await getEndpoint())
-    ) {
+    } else if (providerEndpoint === (await getEndpoint())) {
         dataExchange = await DataExchange.create({
-            consumerEndpoint:
-                consumerSelfDescriptionResponse?.dataspaceEndpoint,
+            consumerEndpoint: consumerEndpoint,
             resources: mappedResources,
             purposeId: purposeId,
             contract: contract,
@@ -217,7 +187,7 @@ export const triggerEcosystemFlow = async (props: {
 
     return {
         dataExchange,
-        providerEndpoint: providerSelfDescriptionResponse?.dataspaceEndpoint,
+        providerEndpoint: providerEndpoint,
     };
 };
 
