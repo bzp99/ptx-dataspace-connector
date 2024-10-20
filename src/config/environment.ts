@@ -63,25 +63,26 @@ export const config: {
 
 export const setupEnvironment = (customEnv?: string) => {
     const envArg = process.argv.find((arg) => arg.startsWith('--'));
-    let envFile = '.env';
-    if (customEnv) {
-        envFile = `.env.${customEnv}`;
-    } else {
-        if (envArg) {
-            const envType = envArg.substring(2);
-            envFile = `.env.${envType}`;
-        }
-    }
+    // This is not needed, because the process.env is already loaded
+    // let envFile = '.env';
+    // if (customEnv) {
+    //     envFile = `.env.${customEnv}`;
+    // } else {
+    //     if (envArg) {
+    //         const envType = envArg.substring(2);
+    //         envFile = `.env.${envType}`;
+    //     }
+    // }
 
-    const env = dotenv.config({
-        path: path.join(__dirname, '..', '..', envFile),
-    });
+    // const env = dotenv.config({
+    //     path: path.join(__dirname, '..', '..', envFile),
+    // });
 
-    if (env.error) {
-        throw new Error(
-            'Error initializing environment. Could not find .env file'
-        );
-    }
+    // if (env.error) {
+    //     throw new Error(
+    //         'Error initializing environment. Could not find .env file'
+    //     );
+    // }
 
     config.env = process.env.NODE_ENV || config.env;
     config.port = parseInt(process.env.PORT) || config.port;
