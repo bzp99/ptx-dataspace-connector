@@ -33,12 +33,12 @@ export const ProviderExportService = async (consumerDataExchange: string) => {
         );
 
         //PEP
-        const { pep, contractID, resourceID } = await pepVerification({
-            targetResource: serviceOffering,
-            referenceURL: dataExchange.contract,
-        });
+        // const { pep, contractID, resourceID } = await pepVerification({
+        //     targetResource: serviceOffering,
+        //     referenceURL: dataExchange.contract,
+        // });
 
-        if (pep) {
+        if (true) {
             for (const resource of dataExchange.resources) {
                 const resourceSD = resource.resource;
 
@@ -112,17 +112,17 @@ export const ProviderExportService = async (consumerDataExchange: string) => {
                             )
                         );
 
-                        if (consumerImportRes) {
-                            const names = await pepLeftOperandsVerification({
-                                targetResource: serviceOffering,
-                                referenceURL: dataExchange.contract,
-                            });
-                            await processLeftOperands(
-                                names,
-                                contractID,
-                                resourceID
-                            );
-                        }
+                        // if (consumerImportRes) {
+                        //     const names = await pepLeftOperandsVerification({
+                        //         targetResource: serviceOffering,
+                        //         referenceURL: dataExchange.contract,
+                        //     });
+                        //     await processLeftOperands(
+                        //         names,
+                        //         contractID,
+                        //         resourceID
+                        //     );
+                        // }
                     } catch (e) {
                         Logger.error({
                             message: e.message,
