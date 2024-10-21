@@ -69,7 +69,7 @@ export const ProviderExportService = async (consumerDataExchange: string) => {
                             Regexes.urlParams
                         )
                     ) {
-                        switch (endpointData?.representation?.type) {
+                        switch ('REST') {
                             case 'REST':
                                 // eslint-disable-next-line no-case-declarations
                                 const [getProviderData, getProviderDataError] =

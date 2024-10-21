@@ -155,7 +155,7 @@ export const consumerImport = async (
                 DataExchangeStatusEnum.CONSUMER_IMPORT_ERROR
             );
         } else {
-            switch (catalogSoftwareResource?.representation?.type) {
+            switch ('REST') {
                 case 'REST':
                     // eslint-disable-next-line no-case-declarations
                     const [postConsumerData, postConsumerDataError] =

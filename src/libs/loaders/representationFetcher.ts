@@ -27,6 +27,10 @@ export const postRepresentation = async (
     }
 
     switch (method) {
+        case undefined:
+            return await axios.post(endpoint, data, {
+                headers: consentHeader,
+            });
         case 'none':
             return await axios.post(endpoint, data, {
                 headers: consentHeader,
@@ -163,6 +167,10 @@ export const getRepresentation = async (props: {
     }
 
     switch (method) {
+        case undefined:
+            return await axios.get(url, {
+                headers: consentHeader,
+            });
         case 'none':
             return await axios.get(url, {
                 headers: consentHeader,
