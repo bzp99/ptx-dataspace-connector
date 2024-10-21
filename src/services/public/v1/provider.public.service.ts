@@ -14,6 +14,7 @@ import { DataExchangeStatusEnum } from '../../../utils/enums/dataExchangeStatusE
 import { consumerImport } from '../../../libs/services/consumer';
 import { processLeftOperands } from '../../../utils/leftOperandProcessor';
 import { Logger } from '../../../libs/loggers';
+import { getCatalogUri } from '../../../libs/loaders/configuration';
 
 export const ProviderExportService = async (consumerDataExchange: string) => {
     //Get the data exchange
@@ -41,6 +42,7 @@ export const ProviderExportService = async (consumerDataExchange: string) => {
         if (true) {
             for (const resource of dataExchange.resources) {
                 const resourceSD = resource.resource;
+                const resourceUrl = await getCatalogUri() + 'dataresources/' + resourceSD;
 
                 // B to B exchange
                 if (
@@ -50,7 +52,7 @@ export const ProviderExportService = async (consumerDataExchange: string) => {
                 ) {
                     //Call the catalog endpoint
                     const [endpointData, endpointDataError] = await handle(
-                        getCatalogData(resourceSD)
+                        getCatalogData(resourceUrl)
                     );
 
                     if (!endpointData?.representation) {

@@ -15,7 +15,7 @@ import {
     triggerEcosystemFlow,
 } from '../../../services/public/v1/consumer.public.service';
 import { ProviderExportService } from '../../../services/public/v1/provider.public.service';
-import { getEndpoint } from '../../../libs/loaders/configuration';
+import { getCatalogUri, getEndpoint } from '../../../libs/loaders/configuration';
 import { ExchangeError } from '../../../libs/errors/exchangeError';
 
 /**
@@ -140,9 +140,11 @@ export const consumerImport = async (
         const [catalogServiceOffering, catalogServiceOfferingError] =
             await handle(getCatalogData(dataExchange.purposeId));
 
+        const resourceUrl = await getCatalogUri() + 'softwareresources/' + catalogServiceOffering?.softwareResources[0];
+
         const [catalogSoftwareResource, catalogSoftwareResourceError] =
             await handle(
-                getCatalogData(catalogServiceOffering?.softwareResources[0])
+                getCatalogData(resourceUrl)
             );
 
         //Import data to endpoint of softwareResource
